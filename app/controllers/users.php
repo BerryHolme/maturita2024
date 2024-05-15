@@ -6,7 +6,13 @@ class users
 {
     public function getRegister(\Base $base)
     {
-        echo \Template::instance()->render("register.html");
+        $user = $base->get("SESSION.user[id]");
+        if ($user) {
+            $base->reroute("board/");
+        }else{
+            echo \Template::instance()->render("register.html");
+        }
+
     }
 
     public function postRegister(\Base $base)
@@ -14,6 +20,22 @@ class users
         $user = $base->get("SESSION.user[id]");
         if ($user) {
             $base->clear("SESSION.user");
+        }
+        if (!$base->get('POST.name')) {
+            echo "Jméno je prázdné";
+            return;
+        }
+        if (!$base->get('POST.surname')) {
+            echo "Příjmení je prázdné";
+            return;
+        }
+        if (!$base->get('POST.email')) {
+            echo "Email je prázný";
+            return;
+        }
+        if (!$base->get('POST.password')) {
+            echo "Heslo je prázdné";
+            return;
         }
 
         $user = new \models\users();
@@ -34,6 +56,15 @@ class users
 
     public function postLogin(\Base $base)
     {
+        if (!$base->get('POST.email')) {
+            echo "Email je prázný";
+            return;
+        }
+        if (!$base->get('POST.password')) {
+            echo "Heslo je prázdné";
+            return;
+        }
+
         $email = $base->get("POST.email");
         $user = new \models\users();
         $base->clear("SESSION.user");
@@ -58,10 +89,9 @@ class users
 
     public function logout(\Base $base)
     {
-        $user = $base->get("SESSION.user[id]");
-        if ($user) {
-            $base->clear("SESSION.user");
-        }
+
+        $base->clear("SESSION.user");
+
         $base->reroute('/');
 
     }

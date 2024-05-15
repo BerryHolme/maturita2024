@@ -161,7 +161,7 @@
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData);
         data.excused = formData.get('excused') ? 1 : 0;
-        data.student = {{ @student.id }}; // Ensure the student ID is included in the data
+        data.student = {{ @student.id }};
 
         fetch('/maturita2024/addRecord/', {
             method: 'POST',
@@ -173,7 +173,7 @@
                 if (record) {
                     const row = document.createElement('tr');
                     row.setAttribute('data-id', record.id);
-                    const formattedDate = new Date(record.date).toLocaleDateString('cs-CZ'); // Format the date
+                    const formattedDate = new Date(record.date).toLocaleDateString('cs-CZ');
                     row.innerHTML = `
                         <td>${formattedDate}</td>
                         <td>${record.hours}</td>
@@ -199,8 +199,8 @@
             .then(result => {
                 if (result.success) {
                     const row = document.querySelector(`tr[data-id="${recordId}"]`);
-                    row.children[2].innerText = 'Ano'; // Update the "excused" column to 'Ano'
-                    row.children[3].innerHTML = ''; // Remove the excuse button
+                    row.children[2].innerText = 'Ano';
+                    row.children[3].innerHTML = '';
                 }
             });
     }

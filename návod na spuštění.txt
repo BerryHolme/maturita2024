@@ -1,0 +1,16 @@
+NÁVOD NA SPUŠTĚNÍ:
+
+1. Nainstalujte databázi maturita2024
+2. na adrese localhost/maturita2024/install zadejte heslo pro nainstalování databáze: _iH5?YF2mcctZ9l£4@#(
+3. Na adrese localhost/maturita2024/register si můžete založit účet a aplikace je funkční
+
+
+
+
+
+
+
+Heslo na install: _iH5?YF2mcctZ9l£4@#(
+
+
+
