@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Třídnice</title>
+    <title>Seznam studentů</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -14,7 +14,7 @@
             padding: 2rem 0;
         }
 
-        .header, .navigation, .content {
+        .content {
             background-color: white;
             padding: 2rem;
             border-radius: 10px;
@@ -26,10 +26,6 @@
 
         h1 {
             margin-bottom: 1.5rem;
-        }
-        .navigation {
-            display: flex;
-            justify-content: space-around;
         }
 
         .navigation a button {
@@ -68,38 +64,31 @@
     </style>
 </head>
 <body>
-<div class="header">
-    <h1>Vítej uživateli {{@SESSION.user.name}} {{@SESSION.user.surname}}</h1>
-</div>
-<div class="navigation">
-    <a href="addstudent/"><button>Přidat studenta</button></a>
-    <a href="students/"><button>Seznam studentů</button></a>
-    <a href="logout/"><button>Odhlásit se</button></a>
-</div>
 <div class="content">
-    <h2>Studenti s největším počtem omluvených hodin</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>Jméno</th>
-            <th>Příjmení</th>
-            <th>Telefon</th>
-            <th>Dojíždí</th>
-            <th>Absence</th>
+    <h1>Seznam studentů</h1>
+</div>
+
+<div class="content">
+<table>
+    <thead>
+    <tr>
+        <th>Jméno</th>
+        <th>Příjmení</th>
+        <th>Telefon</th>
+        <th>Dojíždí</th>
+    </tr>
+    </thead>
+    <tbody>
+    <repeat group="{{@students}}" value="{{@student}}">
+        <tr onclick="window.location.href='student/{{ @student.id }}'">
+            <td>{{@student.name}}</td>
+            <td>{{@student.surname}}</td>
+            <td>{{@student.phone}}</td>
+            <td>{{@student.commute ? 'Ano' : 'Ne'}}</td>
         </tr>
-        </thead>
-        <tbody>
-        <repeat group="{{ @topStudents }}" value="{{ @entry }}">
-            <tr onclick="window.location.href='/maturita2024/student/{{ @entry.student.id }}'">
-                <td>{{ @entry.student.name }}</td>
-                <td>{{ @entry.student.surname }}</td>
-                <td>{{ @entry.student.phone }}</td>
-                <td>{{ @entry.student.commute ? 'Ano' : 'Ne' }}</td>
-                <td>{{ @entry.excused_hours }}</td>
-            </tr>
-        </repeat>
-        </tbody>
-    </table>
+    </repeat>
+    </tbody>
+</table>
 </div>
 </body>
 </html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ @student.name }} {{ @student.surname }}</title>
+    <style>
+        .delete-icon, .excuse-icon {
+            cursor: pointer;
+            color: red;
+        }
+
+        .excuse-icon {
+            color: green;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #007BFF;
+            margin: 0;
+            padding: 2rem 0;
+        }
+
+        .content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 16px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 80%;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        input[type="checkbox"], input[type="datetime-local"], input[type="number"] {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button[type="submit"] {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .navigation a button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .navigation a button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #007BFF;
+        }
+
+        tr {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h1>{{ @student.name }} {{ @student.surname }}</h1>
+</div>
+
+<div class="content">
+    <p>Jméno: {{ @student.name }}</p>
+    <p>Příjmení: {{ @student.surname }}</p>
+    <p>Telefon: {{ @student.phone }}</p>
+    <p>Dojíždí: {{ @student.commute ? 'Ano' : 'Ne' }}</p>
+    <p>Celkový počet zameškaných hodin: {{ @totalAbsence }}</p>
+    <p>Celkový neomluvených hodin: {{ @totalNotexcusedHours}}</p>
+    <p>Celkový omluvených hodin: {{ @totalExcusedHours }}</p>
+</div>
+
+<div class="content">
+    <h2>Přidat záznam</h2>
+    <form id="addRecordForm">
+        <label for="date">Datum:</label>
+        <input type="datetime-local" id="date" name="date" required><br><br>
+        <label for="hours">Hodiny:</label>
+        <input type="number" id="hours" name="hours" required><br><br>
+        <label for="excused">Omluveno:</label>
+        <input type="checkbox" id="excused" name="excused"><br><br>
+        <button type="submit">Přidat záznam</button>
+    </form>
+</div>
+
+<div class="content">
+    <h2>Záznamy</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Hodiny</th>
+            <th>Omluveno</th>
+            <th>Omluvit</th>
+            <th>Odstranit</th>
+        </tr>
+        </thead>
+        <tbody id="recordsList">
+        <repeat group="{{ @records }}" value="{{ @record }}">
+            <tr data-id="{{ @record.id }}">
+                <td>{{ @record.date }}</td>
+                <td>{{ @record.hours }}</td>
+                <td>{{ @record.excused ? 'Ano' : 'Ne' }}</td>
+                <td>
+                    <check if="{{ @record.excused == 0 }}">
+                        <span class="excuse-icon" onclick="excuseRecord({{ @record.id }})">✔️</span>
+                    </check>
+                </td>
+                <td>
+                    <span class="delete-icon" onclick="deleteRecord({{ @record.id }})">🗑️</span>
+                </td>
+            </tr>
+        </repeat>
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    document.getElementById('addRecordForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData);
+        data.excused = formData.get('excused') ? 1 : 0;
+        data.student = {{ @student.id }}; // Ensure the student ID is included in the data
+
+        fetch('/maturita2024/addRecord/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(record => {
+                if (record) {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-id', record.id);
+                    const formattedDate = new Date(record.date).toLocaleDateString('cs-CZ'); // Format the date
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${record.hours}</td>
+                        <td>${record.excused ? 'Ano' : 'Ne'}</td>
+                        <td>
+                            ${record.excused ? '' : '<span class="excuse-icon" onclick="excuseRecord(' + record.id + ')">✔️</span>'}
+                        </td>
+                        <td>
+                            <span class="delete-icon" onclick="deleteRecord(${record.id})">🗑️</span>
+                        </td>
+                    `;
+                    document.getElementById('recordsList').appendChild(row);
+                    event.target.reset();
+                }
+            });
+    });
+
+    function excuseRecord(recordId) {
+        fetch(`/maturita2024/excuseRecord/${recordId}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const row = document.querySelector(`tr[data-id="${recordId}"]`);
+                    row.children[2].innerText = 'Ano'; // Update the "excused" column to 'Ano'
+                    row.children[3].innerHTML = ''; // Remove the excuse button
+                }
+            });
+    }
+
+    function deleteRecord(recordId) {
+        fetch(`/maturita2024/deleteRecord/${recordId}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    const row = document.querySelector(`tr[data-id="${recordId}"]`);
+                    row.remove();
+                }
+            });
+    }
+</script>
+</body>
+</html>

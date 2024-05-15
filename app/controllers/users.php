@@ -11,6 +11,11 @@ class users
 
     public function postRegister(\Base $base)
     {
+        $user = $base->get("SESSION.user[id]");
+        if ($user) {
+            $base->clear("SESSION.user");
+        }
+
         $user = new \models\users();
 
         $existingUser = $user->findone(["email=?", $base->get('POST.email')]);
@@ -48,6 +53,16 @@ class users
         } else {
             echo "Uživatel neexistuje";
         }
+
+    }
+
+    public function logout(\Base $base)
+    {
+        $user = $base->get("SESSION.user[id]");
+        if ($user) {
+            $base->clear("SESSION.user");
+        }
+        $base->reroute('/');
 
     }
 

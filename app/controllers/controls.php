@@ -14,6 +14,12 @@ class controls
         \models\users::setdown();
         \models\users::setup();
 
+        \models\students::setdown();
+        \models\students::setup();
+
+        \models\record::setdown();
+        \models\record::setup();
+
         echo "Nainstalováno!";
     }
 

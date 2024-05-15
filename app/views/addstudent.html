@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registrace</title>
+    <title>Přidat studenta</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -32,12 +32,16 @@
             text-align: left;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
+        input[type="email"], input[type="password"], input[type="text"], input[type="number"] {
             margin-bottom: 1rem;
             padding: 0.5rem;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
+        }
+
+        .checkbox-container {
+            margin-bottom: 1rem;
         }
 
         input[type="submit"] {
@@ -53,42 +57,28 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
-        a {
-            display: block;
-            margin-top: 1rem;
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
-
-
 <div class="container">
-    <h1>Registrace</h1>
+    <h1>Přidat studenta</h1>
     <form method="post">
         <label for="name">Jméno:</label>
-        <input type="text" id="name" class="name" name="name" required placeholder="Vašek">
+        <input type="text" name="name" id="name" required placeholder="Vašek">
 
         <label for="surname">Příjmení:</label>
-        <input type="text" id="surname" class="surname" name="surname" required placeholder="Sýrovec">
+        <input type="text" name="surname" id="surname" required placeholder="Sýrovec">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" class="email" name="email" required placeholder="vasek@syrovec.cz">
+        <label for="phone">Telefonní číslo:</label>
+        <input type="number" name="phone" id="phone" required placeholder="777 888 999">
 
-        <label for="password">Heslo:</label>
-        <input type="password" id="password" class="password" name="password" required>
+        <div class="checkbox-container">
+            <label for="commute">Dojíždí:</label>
+            <input type="checkbox" name="commute" id="commute">
+        </div>
 
-        <input type="submit" value="Registrovat se">
-
+        <input type="submit" value="Přidat žáka">
     </form>
-
-    <a href="/maturita2024/">Pokud již účet máte můžete se přihlásit zde</a>
 </div>
-
 </body>
 </html>
