@@ -11,7 +11,6 @@
   ],
   "require": {
     "bcosca/fatfree": ">=3.8",
-    "ikkez/f3-cortex": ">=v1.7",
-    "ext-json": "*"
+    "ikkez/f3-cortex": ">=v1.7"
   }
 }

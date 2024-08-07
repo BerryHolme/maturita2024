@@ -10,6 +10,15 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/bcosca/fatfree" />
+      <path value="$PROJECT_DIR$/vendor/bcosca/fatfree-core" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/ikkez/f3-schema-builder" />
+      <path value="$PROJECT_DIR$/vendor/ikkez/f3-cortex" />
+    </include_path>
+  </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
   </component>
